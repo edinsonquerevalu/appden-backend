@@ -8,7 +8,7 @@ export const sendRespuestas = async (req, res) => {
     try {
         for (const respuesta of respuestas) {
             const query = `
-                INSERT INTO respuestas (id_checklist, id_pregunta, id_trabajador, respuesta, fecha_hora)
+                INSERT INTO Respuestas (id_checklist, id_pregunta, id_trabajador, respuesta, fecha_hora)
                 VALUES (?, ?, ?, ?, ?)
             `;
             await pool.execute(query, [
