@@ -51,7 +51,7 @@ router.get('/historial/:id_trabajador/:id_checklist', async (req, res) => {
         const [respuestas] = await pool.query(
             `SELECT r.fecha_hora, p.id_pregunta, p.texto_pregunta, r.respuesta
              FROM Respuestas r
-             JOIN Preguntas p ON r.id_pregunta = p.id_pregunta
+             JOIN preguntas p ON r.id_pregunta = p.id_pregunta
              WHERE r.id_trabajador = ? AND r.id_checklist = ?
              ORDER BY r.fecha_hora DESC`,
             [id_trabajador, id_checklist]

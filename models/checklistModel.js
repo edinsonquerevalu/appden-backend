@@ -52,7 +52,7 @@ class ChecklistModel {
 
             // Obtener preguntas existentes
             const [preguntasExistentes] = await connection.query(
-                'SELECT id_pregunta FROM Preguntas WHERE id_checklist = ?',
+                'SELECT id_pregunta FROM preguntas WHERE id_checklist = ?',
                 [idChecklist]
             );
 
@@ -63,14 +63,14 @@ class ChecklistModel {
             const idsParaEliminar = idsPreguntasExistentes.filter(id => !idsPreguntasRecibidas.includes(id));
             if (idsParaEliminar.length > 0) {
                 await connection.query('DELETE FROM Respuestas WHERE id_pregunta IN (?)', [idsParaEliminar]);
-                await connection.query('DELETE FROM Preguntas WHERE id_pregunta IN (?)', [idsParaEliminar]);
+                await connection.query('DELETE FROM preguntas WHERE id_pregunta IN (?)', [idsParaEliminar]);
             }
 
             // Insertar nuevas preguntas (las que no tienen ID)
             for (const pregunta of preguntas) {
                 if (!pregunta.id) {
                     await connection.query(
-                        'INSERT INTO Preguntas (id_checklist, texto_pregunta) VALUES (?, ?)',
+                        'INSERT INTO preguntas (id_checklist, texto_pregunta) VALUES (?, ?)',
                         [idChecklist, pregunta.texto_pregunta]
                     );
                 }
@@ -80,7 +80,7 @@ class ChecklistModel {
             for (const pregunta of preguntas) {
                 if (pregunta.id) {
                     await connection.query(
-                        'UPDATE Preguntas SET texto_pregunta = ? WHERE id_pregunta = ?',
+                        'UPDATE preguntas SET texto_pregunta = ? WHERE id_pregunta = ?',
                         [pregunta.texto_pregunta, pregunta.id]
                     );
                 }
@@ -108,7 +108,7 @@ class ChecklistModel {
             await connection.query('DELETE FROM Respuestas WHERE id_checklist = ?', [idChecklist]);
 
             // Elimina las preguntas asociadas
-            await connection.query('DELETE FROM Preguntas WHERE id_checklist = ?', [idChecklist]);
+            await connection.query('DELETE FROM preguntas WHERE id_checklist = ?', [idChecklist]);
 
             // Finalmente elimina el checklist
             const [result] = await connection.query('DELETE FROM Checklist WHERE id_checklist = ?', [idChecklist]);
